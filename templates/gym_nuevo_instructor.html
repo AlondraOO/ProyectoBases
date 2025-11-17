@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Instructor - Sistema de Gimnasio{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h2 class="mb-4"><i class="bi bi-person-plus-fill"></i> Registrar Nuevo Instructor</h2>
+        
+        <form method="POST" action="/instructores/nuevo">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre Completo *</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="correo" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="correo" name="correo">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="especialidad" class="form-label">Especialidad</label>
+                <input type="text" class="form-control" id="especialidad" name="especialidad"
+                       placeholder="Ej: Yoga, CrossFit, Pilates...">
+            </div>
+
+            <div class="mb-4">
+                <label for="disponibilidad" class="form-label">Disponibilidad</label>
+                <textarea class="form-control" id="disponibilidad" name="disponibilidad" rows="3"
+                          placeholder="Ej: Lunes a Viernes 6:00-14:00"></textarea>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/instructores" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-check-circle"></i> Registrar Instructor
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Pagos - Sistema de Gimnasio{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-cash-coin"></i> Registro de Pagos</h2>
+    <a href="/pagos/nuevo" class="btn btn-danger">
+        <i class="bi bi-plus-circle"></i> Nuevo Pago
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Socio</th>
+                <th>Monto</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago, socio in pagos %}
+            <tr>
+                <td>{{ pago.id_pago }}</td>
+                <td>{{ pago.fecha_pago.strftime('%d/%m/%Y') }}</td>
+                <td><strong>{{ socio.nombre }}</strong></td>
+                <td class="text-success fw-bold">${{ "%.2f"|format(pago.monto) }}</td>
+                <td>
+                    {% if pago.tipo_pago == 'INSCRIPCION' %}
+                        <span class="badge bg-primary">Inscripción</span>
+                    {% elif pago.tipo_pago == 'MENSUALIDAD' %}
+                        <span class="badge bg-info">Mensualidad</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Extra</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if pago.estado_pago == 'PAGADO' %}
+                        <span class="badge bg-success">Pagado</span>
+                    {% else %}
+                        <span class="badge bg-warning">Pendiente</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">No hay pagos registrados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-4">
+    <div class="card bg-light">
+        <div class="card-body">
+            <h5 class="card-title"><i class="bi bi-calculator"></i> Resumen</h5>
+            <p class="mb-0">Total de pagos: <strong>{{ pagos|length }}</strong></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

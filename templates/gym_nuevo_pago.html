@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Pago - Sistema de Gimnasio{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h2 class="mb-4"><i class="bi bi-plus-circle"></i> Registrar Nuevo Pago</h2>
+        
+        <form method="POST" action="/pagos/nuevo">
+            <div class="mb-3">
+                <label for="id_socio" class="form-label">Socio *</label>
+                <select class="form-select" id="id_socio" name="id_socio" required>
+                    <option value="">Seleccione un socio</option>
+                    {% for socio in socios %}
+                        <option value="{{ socio.id_socio }}">
+                            {{ socio.nombre }} - {{ socio.tipo_membresia }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="monto" class="form-label">Monto *</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" id="monto" name="monto" 
+                               step="0.01" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="tipo_pago" class="form-label">Tipo de Pago *</label>
+                    <select class="form-select" id="tipo_pago" name="tipo_pago" required>
+                        <option value="">Seleccione tipo</option>
+                        <option value="INSCRIPCION">Inscripción</option>
+                        <option value="MENSUALIDAD">Mensualidad</option>
+                        <option value="EXTRA">Extra</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> 
+                <strong>Precios sugeridos:</strong><br>
+                Mensual: $500/mes | Anual: $5,000/año | Premium: $1,000/mes
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/pagos" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-check-circle"></i> Registrar Pago
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

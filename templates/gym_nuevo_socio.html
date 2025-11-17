@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Socio - Sistema de Gimnasio{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h2 class="mb-4"><i class="bi bi-person-plus"></i> Registrar Nuevo Socio</h2>
+        
+        <form method="POST" action="/socios/nuevo">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nombre" class="form-label">Nombre Completo *</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="correo" class="form-label">Correo Electrónico *</label>
+                    <input type="email" class="form-control" id="correo" name="correo" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="edad" class="form-label">Edad *</label>
+                    <input type="number" class="form-control" id="edad" name="edad" min="1" max="120" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="tipo_membresia" class="form-label">Tipo de Membresía *</label>
+                <select class="form-select" id="tipo_membresia" name="tipo_membresia" required>
+                    <option value="">Seleccione una membresía</option>
+                    <option value="MENSUAL">Mensual - $500/mes</option>
+                    <option value="ANUAL">Anual - $5,000/año</option>
+                    <option value="PREMIUM">Premium - $1,000/mes</option>
+                </select>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/socios" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Registrar Socio
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

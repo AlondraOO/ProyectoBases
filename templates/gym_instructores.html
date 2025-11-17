@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Instructores - Sistema de Gimnasio{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-person-badge"></i> Instructores</h2>
+    <a href="/instructores/nuevo" class="btn btn-warning">
+        <i class="bi bi-person-plus-fill"></i> Nuevo Instructor
+    </a>
+</div>
+
+<div class="row">
+    {% for instructor in instructores %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                        <i class="bi bi-person-fill text-warning fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">{{ instructor.nombre }}</h5>
+                        <small class="text-muted">ID: {{ instructor.id_instructor }}</small>
+                    </div>
+                </div>
+                <hr>
+                <p class="mb-2">
+                    <i class="bi bi-envelope"></i> {{ instructor.correo or 'No registrado' }}
+                </p>
+                <p class="mb-2">
+                    <i class="bi bi-telephone"></i> {{ instructor.telefono or 'No registrado' }}
+                </p>
+                <p class="mb-2">
+                    <i class="bi bi-award"></i> <strong>Especialidad:</strong><br>
+                    <span class="badge bg-warning">{{ instructor.especialidad or 'General' }}</span>
+                </p>
+                <p class="mb-0">
+                    <i class="bi bi-calendar-check"></i> <strong>Disponibilidad:</strong><br>
+                    <small>{{ instructor.disponibilidad or 'Por definir' }}</small>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> No hay instructores registrados
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
