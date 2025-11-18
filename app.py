@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, date
+from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import os
@@ -22,18 +22,17 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Modelos de Base de Datos
-
+# ================== MODELOS ==================
 class Usuario(db.Model):
     __tablename__ = 'usuario'
     id_usuario = db.Column(db.Integer, primary_key=True)
     usuario = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     nombre = db.Column(db.String(100), nullable=False)
-    rol = db.Column(db.String(20), default='secretaria')  # secretaria, admin
+    rol = db.Column(db.String(20), default='secretaria')
     
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = generate_password_hash(password, method='pbkdf2:sha256')
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -46,7 +45,7 @@ class Socio(db.Model):
     telefono = db.Column(db.String(20))
     edad = db.Column(db.Integer)
     fecha_inscripcion = db.Column(db.Date, default=date.today)
-    tipo_membresia = db.Column(db.String(20), nullable=False)  # MENSUAL, ANUAL, PREMIUM
+    tipo_membresia = db.Column(db.String(20), nullable=False)
     estado_membresia = db.Column(db.String(20), default='ACTIVO')
     
     pagos = db.relationship('Pago', backref='socio', lazy=True)
@@ -80,7 +79,7 @@ class Pago(db.Model):
     fecha_pago = db.Column(db.Date, default=date.today)
     monto = db.Column(db.Float, nullable=False)
     estado_pago = db.Column(db.String(20), default='PAGADO')
-    tipo_pago = db.Column(db.String(20))  # INSCRIPCION, MENSUALIDAD, EXTRA
+    tipo_pago = db.Column(db.String(20))
 
 class Asistencia(db.Model):
     __tablename__ = 'asistencia'
@@ -89,16 +88,13 @@ class Asistencia(db.Model):
     id_clase = db.Column(db.Integer, db.ForeignKey('clase.id_clase'), nullable=False)
     fecha_asistencia = db.Column(db.Date, default=date.today)
 
-# Rutas
-
+# ================== RUTAS ==================
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         usuario = request.form['usuario']
         password = request.form['password']
-        
         user = Usuario.query.filter_by(usuario=usuario).first()
-        
         if user and user.check_password(password):
             session['usuario_id'] = user.id_usuario
             session['usuario_nombre'] = user.nombre
@@ -107,7 +103,6 @@ def login():
             return redirect(url_for('index'))
         else:
             flash('Usuario o contraseña incorrectos', 'danger')
-    
     return render_template('login.html')
 
 @app.route('/logout')
@@ -141,8 +136,7 @@ def nuevo_socio():
             )
             db.session.add(socio)
             db.session.commit()
-            
-            # Crear pago de inscripción
+            # Pago de inscripción automático
             montos = {'MENSUAL': 500, 'ANUAL': 5000, 'PREMIUM': 1000}
             pago = Pago(
                 id_socio=socio.id_socio,
@@ -151,13 +145,11 @@ def nuevo_socio():
             )
             db.session.add(pago)
             db.session.commit()
-            
             flash('Socio registrado exitosamente', 'success')
             return redirect(url_for('listar_socios'))
         except Exception as e:
             db.session.rollback()
             flash(f'Error al registrar socio: {str(e)}', 'danger')
-    
     return render_template('nuevo_socio.html')
 
 @app.route('/clases')
@@ -184,7 +176,6 @@ def nueva_clase():
         except Exception as e:
             db.session.rollback()
             flash(f'Error al crear clase: {str(e)}', 'danger')
-    
     instructores = Instructor.query.all()
     return render_template('nueva_clase.html', instructores=instructores)
 
@@ -213,7 +204,6 @@ def nuevo_instructor():
         except Exception as e:
             db.session.rollback()
             flash(f'Error al registrar instructor: {str(e)}', 'danger')
-    
     return render_template('nuevo_instructor.html')
 
 @app.route('/asistencia', methods=['GET', 'POST'])
@@ -231,21 +221,17 @@ def registrar_asistencia():
         except Exception as e:
             db.session.rollback()
             flash(f'Error al registrar asistencia: {str(e)}', 'danger')
-    
     socios = Socio.query.filter_by(estado_membresia='ACTIVO').all()
     clases = Clase.query.all()
     asistencias = db.session.query(Asistencia, Socio, Clase)\
         .join(Socio).join(Clase)\
         .order_by(Asistencia.fecha_asistencia.desc()).limit(20).all()
-    
     return render_template('asistencia.html', socios=socios, clases=clases, asistencias=asistencias)
 
 @app.route('/pagos')
 @login_required
 def listar_pagos():
-    pagos = db.session.query(Pago, Socio)\
-        .join(Socio)\
-        .order_by(Pago.fecha_pago.desc()).all()
+    pagos = db.session.query(Pago, Socio).join(Socio).order_by(Pago.fecha_pago.desc()).all()
     return render_template('pagos.html', pagos=pagos)
 
 @app.route('/pagos/nuevo', methods=['GET', 'POST'])
@@ -265,10 +251,10 @@ def nuevo_pago():
         except Exception as e:
             db.session.rollback()
             flash(f'Error al registrar pago: {str(e)}', 'danger')
-    
     socios = Socio.query.all()
     return render_template('nuevo_pago.html', socios=socios)
 
+# =============== DB UTILITIES =================
 @app.route('/init-db')
 def init_db():
     try:
@@ -286,24 +272,20 @@ def reset_db():
     except Exception as e:
         return f'Error al reiniciar base de datos: {str(e)}'
 
+# ================== USUARIO INICIAL ==================
 @app.route('/crear-usuario-inicial')
 def crear_usuario_inicial():
     try:
-        # Verificar si ya existe un usuario
         if Usuario.query.first():
             return 'Ya existe un usuario en el sistema'
-        
-        # Crear usuario inicial
         usuario = Usuario(
             usuario='admin',
             nombre='Administrador',
             rol='admin'
         )
-        usuario.set_password('admin123')  # Cambiar esta contraseña después
-        
+        usuario.set_password('admin123')
         db.session.add(usuario)
         db.session.commit()
-        
         return 'Usuario inicial creado - Usuario: admin, Contraseña: admin123 (CAMBIAR DESPUÉS)'
     except Exception as e:
         db.session.rollback()
