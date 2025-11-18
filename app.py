@@ -283,7 +283,7 @@ def crear_usuario_inicial():
             nombre='Administrador',
             rol='admin'
         )
-        usuario.set_password('admin123')
+        usuario.set_password('54321')
         db.session.add(usuario)
         db.session.commit()
         return 'Usuario inicial creado - Usuario: admin, Contraseña: admin123 (CAMBIAR DESPUÉS)'
