@@ -286,7 +286,7 @@ def crear_usuario_inicial():
         usuario.set_password('54321')
         db.session.add(usuario)
         db.session.commit()
-        return 'Usuario inicial creado - Usuario: admin, Contraseña: admin123 (CAMBIAR DESPUÉS)'
+        return 'Usuario inicial creado - Usuario: admin, Contraseña: 54321 (CAMBIAR DESPUÉS)'
     except Exception as e:
         db.session.rollback()
         return f'Error al crear usuario: {str(e)}'
