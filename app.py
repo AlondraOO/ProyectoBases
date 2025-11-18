@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 import os
 
 app = Flask(__name__)
@@ -11,7 +12,31 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# Decorador para proteger rutas
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'usuario_id' not in session:
+            flash('Por favor inicia sesión para acceder', 'warning')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 # Modelos de Base de Datos
+
+class Usuario(db.Model):
+    __tablename__ = 'usuario'
+    id_usuario = db.Column(db.Integer, primary_key=True)
+    usuario = db.Column(db.String(50), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    nombre = db.Column(db.String(100), nullable=False)
+    rol = db.Column(db.String(20), default='secretaria')  # secretaria, admin
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 class Socio(db.Model):
     __tablename__ = 'socio'
@@ -66,16 +91,44 @@ class Asistencia(db.Model):
 
 # Rutas
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        usuario = request.form['usuario']
+        password = request.form['password']
+        
+        user = Usuario.query.filter_by(usuario=usuario).first()
+        
+        if user and user.check_password(password):
+            session['usuario_id'] = user.id_usuario
+            session['usuario_nombre'] = user.nombre
+            session['usuario_rol'] = user.rol
+            flash(f'¡Bienvenida {user.nombre}!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Usuario o contraseña incorrectos', 'danger')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Sesión cerrada exitosamente', 'info')
+    return redirect(url_for('login'))
+
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
 @app.route('/socios')
+@login_required
 def listar_socios():
     socios = Socio.query.all()
     return render_template('socios.html', socios=socios)
 
 @app.route('/socios/nuevo', methods=['GET', 'POST'])
+@login_required
 def nuevo_socio():
     if request.method == 'POST':
         try:
@@ -108,11 +161,13 @@ def nuevo_socio():
     return render_template('nuevo_socio.html')
 
 @app.route('/clases')
+@login_required
 def listar_clases():
     clases = Clase.query.all()
     return render_template('clases.html', clases=clases)
 
 @app.route('/clases/nueva', methods=['GET', 'POST'])
+@login_required
 def nueva_clase():
     if request.method == 'POST':
         try:
@@ -134,11 +189,13 @@ def nueva_clase():
     return render_template('nueva_clase.html', instructores=instructores)
 
 @app.route('/instructores')
+@login_required
 def listar_instructores():
     instructores = Instructor.query.all()
     return render_template('instructores.html', instructores=instructores)
 
 @app.route('/instructores/nuevo', methods=['GET', 'POST'])
+@login_required
 def nuevo_instructor():
     if request.method == 'POST':
         try:
@@ -160,6 +217,7 @@ def nuevo_instructor():
     return render_template('nuevo_instructor.html')
 
 @app.route('/asistencia', methods=['GET', 'POST'])
+@login_required
 def registrar_asistencia():
     if request.method == 'POST':
         try:
@@ -183,6 +241,7 @@ def registrar_asistencia():
     return render_template('asistencia.html', socios=socios, clases=clases, asistencias=asistencias)
 
 @app.route('/pagos')
+@login_required
 def listar_pagos():
     pagos = db.session.query(Pago, Socio)\
         .join(Socio)\
@@ -190,6 +249,7 @@ def listar_pagos():
     return render_template('pagos.html', pagos=pagos)
 
 @app.route('/pagos/nuevo', methods=['GET', 'POST'])
+@login_required
 def nuevo_pago():
     if request.method == 'POST':
         try:
@@ -225,6 +285,29 @@ def reset_db():
         return 'Base de datos reiniciada correctamente - Todas las tablas recreadas'
     except Exception as e:
         return f'Error al reiniciar base de datos: {str(e)}'
+
+@app.route('/crear-usuario-inicial')
+def crear_usuario_inicial():
+    try:
+        # Verificar si ya existe un usuario
+        if Usuario.query.first():
+            return 'Ya existe un usuario en el sistema'
+        
+        # Crear usuario inicial
+        usuario = Usuario(
+            usuario='admin',
+            nombre='Administrador',
+            rol='admin'
+        )
+        usuario.set_password('admin123')  # Cambiar esta contraseña después
+        
+        db.session.add(usuario)
+        db.session.commit()
+        
+        return 'Usuario inicial creado - Usuario: admin, Contraseña: admin123 (CAMBIAR DESPUÉS)'
+    except Exception as e:
+        db.session.rollback()
+        return f'Error al crear usuario: {str(e)}'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
