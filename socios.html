@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Socios - Sistema de Gimnasio{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-people-fill"></i> Lista de Socios</h2>
+    <a href="/socios/nuevo" class="btn btn-primary">
+        <i class="bi bi-person-plus"></i> Nuevo Socio
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Edad</th>
+                <th>Membresía</th>
+                <th>Estado</th>
+                <th>Fecha Inscripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for socio in socios %}
+            <tr>
+                <td>{{ socio.id_socio }}</td>
+                <td><strong>{{ socio.nombre }}</strong></td>
+                <td>{{ socio.correo }}</td>
+                <td>{{ socio.telefono }}</td>
+                <td>{{ socio.edad }}</td>
+                <td>
+                    {% if socio.tipo_membresia == 'MENSUAL' %}
+                        <span class="badge bg-info">Mensual</span>
+                    {% elif socio.tipo_membresia == 'ANUAL' %}
+                        <span class="badge bg-success">Anual</span>
+                    {% else %}
+                        <span class="badge bg-warning">Premium</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if socio.estado_membresia == 'ACTIVO' %}
+                        <span class="badge bg-success">Activo</span>
+                    {% else %}
+                        <span class="badge bg-danger">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>{{ socio.fecha_inscripcion.strftime('%d/%m/%Y') if socio.fecha_inscripcion else 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="text-center text-muted">No hay socios registrados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
