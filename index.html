@@ -1,1 +1,86 @@
+{% extends "base.html" %}
 
+{% block title %}Asistencia - Sistema de Gimnasio{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-check-circle"></i> Registro de Asistencia</h2>
+
+<div class="row">
+    <div class="col-lg-5 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-clipboard-check"></i> Registrar Asistencia</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/asistencia">
+                    <div class="mb-3">
+                        <label for="id_socio" class="form-label">Socio *</label>
+                        <select class="form-select" id="id_socio" name="id_socio" required>
+                            <option value="">Seleccione un socio</option>
+                            {% for socio in socios %}
+                                <option value="{{ socio.id_socio }}">
+                                    {{ socio.nombre }} - {{ socio.tipo_membresia }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_clase" class="form-label">Clase *</label>
+                        <select class="form-select" id="id_clase" name="id_clase" required>
+                            <option value="">Seleccione una clase</option>
+                            {% for clase in clases %}
+                                <option value="{{ clase.id_clase }}">
+                                    {{ clase.nombre }} - {{ clase.horario }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Registrar Asistencia
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-list-ul"></i> Últimas Asistencias</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Socio</th>
+                                <th>Clase</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asistencia, socio, clase in asistencias %}
+                            <tr>
+                                <td>{{ asistencia.fecha_asistencia.strftime('%d/%m/%Y') }}</td>
+                                <td>{{ socio.nombre }}</td>
+                                <td><span class="badge bg-info">{{ clase.nombre }}</span></td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">
+                                    No hay asistencias registradas
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
