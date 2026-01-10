@@ -1,61 +1,84 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Socios - Sistema de Gimnasio</title>
 
-{% block title %}Socios - Sistema de Gimnasio{% endblock %}
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-{% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-people-fill"></i> Lista de Socios</h2>
-    <a href="/socios/nuevo" class="btn btn-primary">
-        <i class="bi bi-person-plus"></i> Nuevo Socio
-    </a>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">Gimnasio</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="socios.html">Socios</a></li>
+                <li class="nav-item"><a class="nav-link" href="clases.html">Clases</a></li>
+                <li class="nav-item"><a class="nav-link" href="pagos.html">Pagos</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-people-fill"></i> Lista de Socios</h2>
+        <a href="nuevo_socio.html" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> Nuevo Socio
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Edad</th>
+                    <th>Membresía</th>
+                    <th>Estado</th>
+                    <th>Fecha Inscripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- EJEMPLO ESTÁTICO -->
+                <tr>
+                    <td>1</td>
+                    <td><strong>Ana López</strong></td>
+                    <td>ana@email.com</td>
+                    <td>5512345678</td>
+                    <td>25</td>
+                    <td><span class="badge bg-info">Mensual</span></td>
+                    <td><span class="badge bg-success">Activo</span></td>
+                    <td>12/01/2025</td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td><strong>Carlos Pérez</strong></td>
+                    <td>carlos@email.com</td>
+                    <td>5598765432</td>
+                    <td>30</td>
+                    <td><span class="badge bg-success">Anual</span></td>
+                    <td><span class="badge bg-danger">Inactivo</span></td>
+                    <td>05/11/2024</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Edad</th>
-                <th>Membresía</th>
-                <th>Estado</th>
-                <th>Fecha Inscripción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for socio in socios %}
-            <tr>
-                <td>{{ socio.id_socio }}</td>
-                <td><strong>{{ socio.nombre }}</strong></td>
-                <td>{{ socio.correo }}</td>
-                <td>{{ socio.telefono }}</td>
-                <td>{{ socio.edad }}</td>
-                <td>
-                    {% if socio.tipo_membresia == 'MENSUAL' %}
-                        <span class="badge bg-info">Mensual</span>
-                    {% elif socio.tipo_membresia == 'ANUAL' %}
-                        <span class="badge bg-success">Anual</span>
-                    {% else %}
-                        <span class="badge bg-warning">Premium</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if socio.estado_membresia == 'ACTIVO' %}
-                        <span class="badge bg-success">Activo</span>
-                    {% else %}
-                        <span class="badge bg-danger">Inactivo</span>
-                    {% endif %}
-                </td>
-                <td>{{ socio.fecha_inscripcion.strftime('%d/%m/%Y') if socio.fecha_inscripcion else 'N/A' }}</td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="8" class="text-center text-muted">No hay socios registrados</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endblock %}
+</body>
+</html>
