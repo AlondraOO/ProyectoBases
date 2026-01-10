@@ -1,53 +1,129 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructores - Sistema de Gimnasio</title>
 
-{% block title %}Instructores - Sistema de Gimnasio{% endblock %}
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-{% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-person-badge"></i> Instructores</h2>
-    <a href="/instructores/nuevo" class="btn btn-warning">
-        <i class="bi bi-person-plus-fill"></i> Nuevo Instructor
-    </a>
-</div>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-<div class="row">
-    {% for instructor in instructores %}
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
-                        <i class="bi bi-person-fill text-warning fs-3"></i>
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">Gimnasio</a>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="socios.html">Socios</a></li>
+            <li class="nav-item"><a class="nav-link" href="clases.html">Clases</a></li>
+            <li class="nav-item"><a class="nav-link active" href="instructores.html">Instructores</a></li>
+            <li class="nav-item"><a class="nav-link" href="pagos.html">Pagos</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-person-badge"></i> Instructores</h2>
+        <a href="nuevo_instructor.html" class="btn btn-warning">
+            <i class="bi bi-person-plus-fill"></i> Nuevo Instructor
+        </a>
+    </div>
+
+    <div class="row">
+
+        <!-- INSTRUCTOR 1 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                            <i class="bi bi-person-fill text-warning fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0">Juan Pérez</h5>
+                            <small class="text-muted">ID: 001</small>
+                        </div>
                     </div>
-                    <div>
-                        <h5 class="card-title mb-0">{{ instructor.nombre }}</h5>
-                        <small class="text-muted">ID: {{ instructor.id_instructor }}</small>
-                    </div>
+                    <hr>
+                    <p><i class="bi bi-envelope"></i> juan@gym.com</p>
+                    <p><i class="bi bi-telephone"></i> 555-123-4567</p>
+                    <p>
+                        <i class="bi bi-award"></i> <strong>Especialidad:</strong><br>
+                        <span class="badge bg-warning">CrossFit</span>
+                    </p>
+                    <p>
+                        <i class="bi bi-calendar-check"></i> <strong>Disponibilidad:</strong><br>
+                        <small>Lunes a Viernes</small>
+                    </p>
                 </div>
-                <hr>
-                <p class="mb-2">
-                    <i class="bi bi-envelope"></i> {{ instructor.correo or 'No registrado' }}
-                </p>
-                <p class="mb-2">
-                    <i class="bi bi-telephone"></i> {{ instructor.telefono or 'No registrado' }}
-                </p>
-                <p class="mb-2">
-                    <i class="bi bi-award"></i> <strong>Especialidad:</strong><br>
-                    <span class="badge bg-warning">{{ instructor.especialidad or 'General' }}</span>
-                </p>
-                <p class="mb-0">
-                    <i class="bi bi-calendar-check"></i> <strong>Disponibilidad:</strong><br>
-                    <small>{{ instructor.disponibilidad or 'Por definir' }}</small>
-                </p>
             </div>
         </div>
-    </div>
-    {% else %}
-    <div class="col-12">
-        <div class="alert alert-info text-center">
-            <i class="bi bi-info-circle"></i> No hay instructores registrados
+
+        <!-- INSTRUCTOR 2 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                            <i class="bi bi-person-fill text-warning fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0">María López</h5>
+                            <small class="text-muted">ID: 002</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <p><i class="bi bi-envelope"></i> maria@gym.com</p>
+                    <p><i class="bi bi-telephone"></i> 555-987-6543</p>
+                    <p>
+                        <i class="bi bi-award"></i> <strong>Especialidad:</strong><br>
+                        <span class="badge bg-warning">Yoga</span>
+                    </p>
+                    <p>
+                        <i class="bi bi-calendar-check"></i> <strong>Disponibilidad:</strong><br>
+                        <small>Fines de semana</small>
+                    </p>
+                </div>
+            </div>
         </div>
+
+        <!-- INSTRUCTOR 3 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                            <i class="bi bi-person-fill text-warning fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0">Carlos Ruiz</h5>
+                            <small class="text-muted">ID: 003</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <p><i class="bi bi-envelope"></i> No registrado</p>
+                    <p><i class="bi bi-telephone"></i> No registrado</p>
+                    <p>
+                        <i class="bi bi-award"></i> <strong>Especialidad:</strong><br>
+                        <span class="badge bg-warning">General</span>
+                    </p>
+                    <p>
+                        <i class="bi bi-calendar-check"></i> <strong>Disponibilidad:</strong><br>
+                        <small>Por definir</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
     </div>
-    {% endfor %}
 </div>
-{% endblock %}
+
+</body>
+</html>
