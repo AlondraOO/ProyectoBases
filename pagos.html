@@ -1,70 +1,96 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagos - Sistema de Gimnasio</title>
 
-{% block title %}Pagos - Sistema de Gimnasio{% endblock %}
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-{% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-cash-coin"></i> Registro de Pagos</h2>
-    <a href="/pagos/nuevo" class="btn btn-danger">
-        <i class="bi bi-plus-circle"></i> Nuevo Pago
-    </a>
-</div>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>Socio</th>
-                <th>Monto</th>
-                <th>Tipo</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pago, socio in pagos %}
-            <tr>
-                <td>{{ pago.id_pago }}</td>
-                <td>{{ pago.fecha_pago.strftime('%d/%m/%Y') }}</td>
-                <td><strong>{{ socio.nombre }}</strong></td>
-                <td class="text-success fw-bold">${{ "%.2f"|format(pago.monto) }}</td>
-                <td>
-                    {% if pago.tipo_pago == 'INSCRIPCION' %}
-                        <span class="badge bg-primary">Inscripción</span>
-                    {% elif pago.tipo_pago == 'MENSUALIDAD' %}
-                        <span class="badge bg-info">Mensualidad</span>
-                    {% else %}
-                        <span class="badge bg-secondary">Extra</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if pago.estado_pago == 'PAGADO' %}
-                        <span class="badge bg-success">Pagado</span>
-                    {% else %}
-                        <span class="badge bg-warning">Pendiente</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="6" class="text-center text-muted">No hay pagos registrados</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
 
-<div class="mt-4">
-    <div class="card bg-light">
-        <div class="card-body" style="color: black !important;">
-            <h5 class="card-title" style="color: black !important;">
-                <i class="bi bi-calculator"></i> Resumen
-            </h5>
-            <p class="mb-0" style="color: black !important;">
-                Total de pagos: <strong>{{ pagos|length }}</strong>
-            </p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">Gimnasio</a>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="socios.html">Socios</a></li>
+            <li class="nav-item"><a class="nav-link" href="clases.html">Clases</a></li>
+            <li class="nav-item"><a class="nav-link" href="asistencia.html">Asistencia</a></li>
+            <li class="nav-item"><a class="nav-link active" href="pagos.html">Pagos</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-cash-coin"></i> Registro de Pagos</h2>
+        <a href="nuevo_pago.html" class="btn btn-danger">
+            <i class="bi bi-plus-circle"></i> Nuevo Pago
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Socio</th>
+                    <th>Monto</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>05/01/2026</td>
+                    <td><strong>Juan Pérez</strong></td>
+                    <td class="text-success fw-bold">$500.00</td>
+                    <td><span class="badge bg-primary">Inscripción</span></td>
+                    <td><span class="badge bg-success">Pagado</span></td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>05/01/2026</td>
+                    <td><strong>María López</strong></td>
+                    <td class="text-success fw-bold">$400.00</td>
+                    <td><span class="badge bg-info">Mensualidad</span></td>
+                    <td><span class="badge bg-success">Pagado</span></td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>04/01/2026</td>
+                    <td><strong>Carlos Ruiz</strong></td>
+                    <td class="text-success fw-bold">$300.00</td>
+                    <td><span class="badge bg-secondary">Extra</span></td>
+                    <td><span class="badge bg-warning">Pendiente</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <div class="card bg-light">
+            <div class="card-body" style="color: black !important;">
+                <h5 class="card-title">
+                    <i class="bi bi-calculator"></i> Resumen
+                </h5>
+                <p class="mb-0">
+                    Total de pagos: <strong>3</strong>
+                </p>
+            </div>
         </div>
     </div>
+
 </div>
-{% endblock %}
+
+</body>
+</html>
