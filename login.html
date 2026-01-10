@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistema de Gimnasio</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
         body {
             background: linear-gradient(135deg, #01030d 0%, #383838 100%);
@@ -29,50 +31,26 @@
             margin-bottom: 30px;
         }
         .login-header h1 {
-            color: white;
             font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        .login-header p {
-            color: rgba(255, 255, 255, 0.7);
         }
         .form-label {
             color: white;
             font-weight: 500;
-            margin-bottom: 8px;
         }
         .form-control {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 12px 15px;
             border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #667eea;
-            color: white;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.5);
         }
         .btn-login {
             background: linear-gradient(135deg, #f59b14 0%, #fa1919 100%);
             border: none;
             padding: 12px;
             border-radius: 10px;
-            color: white;
-            font-weight: 600;
             width: 100%;
-            transition: all 0.3s ease;
+            font-weight: 600;
             margin-top: 10px;
-        }
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.6);
-            color: white;
         }
         .input-group-text {
             background: rgba(102, 126, 234, 0.3);
@@ -83,76 +61,61 @@
         .input-group .form-control {
             border-left: none;
         }
-        .alert {
-            background: rgba(220, 53, 69, 0.2);
-            border: 1px solid #dc3545;
-            color: white;
-            border-radius: 10px;
-        }
-        .logo-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
+
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <div class="logo-icon"></div>
-            <h1>SMART GYM</h1>
-            <p>Inicio de sesión</p>
-        </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill"></i> {{ message }}
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <form method="POST" action="/login">
-            <div class="mb-3">
-                <label for="usuario" class="form-label">
-                    <i class="bi bi-person-fill"></i> Usuario
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <i class="bi bi-person"></i>
-                    </span>
-                    <input type="text" class="form-control" id="usuario" name="usuario" 
-                           placeholder="Ingresa tu usuario" required autofocus>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">
-                    <i class="bi bi-lock-fill"></i> Contraseña
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <i class="bi bi-lock"></i>
-                    </span>
-                    <input type="password" class="form-control" id="password" name="password" 
-                           placeholder="Ingresa tu contraseña" required>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-login">
-                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-            </button>
-        </form>
-
-        <div class="text-center mt-4">
-            <small class="text-muted">
-                <i class="bi bi-shield-lock"></i> Acceso solo para personal autorizado
-            </small>
-        </div>
+<div class="login-container">
+    <div class="login-header">
+        <h1>SMART GYM</h1>
+        <p>Inicio de sesión (Demo)</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ALERTA SOLO VISUAL -->
+    <div class="alert alert-warning text-center">
+        <i class="bi bi-info-circle-fill"></i>
+        Esta es una demostración visual. El login real funciona en Render.
+    </div>
+
+    <!-- FORMULARIO SIN BACKEND -->
+    <form>
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-person-fill"></i> Usuario
+            </label>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-person"></i>
+                </span>
+                <input type="text" class="form-control" placeholder="Usuario demo">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-lock-fill"></i> Contraseña
+            </label>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                </span>
+                <input type="password" class="form-control" placeholder="Contraseña demo">
+            </div>
+        </div>
+
+        <!-- BOTÓN QUE SOLO REDIRIGE -->
+        <a href="index.html" class="btn btn-login">
+            <i class="bi bi-box-arrow-in-right"></i> Entrar
+        </a>
+    </form>
+
+    <div class="text-center mt-4">
+        <small class="text-muted">
+            <i class="bi bi-shield-lock"></i> Acceso solo para demostración
+        </small>
+    </div>
+</div>
+
 </body>
 </html>
